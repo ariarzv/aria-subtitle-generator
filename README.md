@@ -18,6 +18,18 @@ Aria is a desktop application that automatically generates high‑quality Persia
 
 ---
 
+## 📸 Screenshots
+
+<p align="center">
+  <img src="screenshots/ui-1.png" width="900" />
+</p>
+
+<p align="center">
+  <img src="screenshots/ui-2.png" width="900" />
+</p>
+
+---
+
 ## 🛠 Tech Stack
 - Electron
 - React (Vite)
@@ -26,9 +38,17 @@ Aria is a desktop application that automatically generates high‑quality Persia
 
 ---
 
-## 🚀 Installation
+## 🔐 Configuration (Gemini API Key)
 
-```bash
+Create a `.env` file in the project root (do NOT commit it to GitHub):
+
+```env
+GEMINI_API_KEY=YOUR_API_KEY_HERE
+Tip: You can also create a .env.example file for others.
+
+🚀 Installation
+Bash
+
 npm install
 npm run dev
 ```
