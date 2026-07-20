@@ -33,7 +33,6 @@ function createWindow() {
   }
 }
 
-// تنظیم پروکسی از داخل اپ
 ipcMain.handle('proxy:set', async (event, proxyUrl) => {
   try {
     currentProxy = proxyUrl || '';
@@ -54,7 +53,6 @@ ipcMain.handle('proxy:set', async (event, proxyUrl) => {
   }
 });
 
-// ارتباط با Gemini API
 ipcMain.handle('gemini:generateContent', async (event, args) => {
   try {
     const { apiKey, payload, model } = args;
