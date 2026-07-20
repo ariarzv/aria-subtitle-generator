@@ -1,3 +1,6 @@
+<p align="center">
+  <img src="assets/ariar-avatar.png" width="140" alt="Aria icon" />
+</p>
 # Aria 🎬
 ### AI‑Powered Persian Subtitle Generator
 
