@@ -39,13 +39,11 @@ const styleTheme = {
 
 const GEMINI_MODEL = 'gemini-flash-latest';
 
-// ⚠️ آیدی‌های خودت رو اینجا وارد کن
 const TELEGRAM_ID = 'aria_rev';
 const INSTAGRAM_ID = 'aria.rzv';
 
 export default function App() {
 
-  /* ✅ ذخیره دائمی API */
   const [apiKey, setApiKey] = useState(() => {
     return localStorage.getItem('gemini_api_key') || '';
   });
@@ -72,7 +70,6 @@ export default function App() {
   const videoRef = useRef(null);
   const fileInputRef = useRef(null);
 
-  /* ✅ رفرش داخلی برنامه */
   const refreshApp = () => {
     window.location.reload();
   };
@@ -92,7 +89,7 @@ export default function App() {
     if (window.electronAPI?.setProxy && proxyUrl) {
       window.electronAPI.setProxy(proxyUrl);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, []);
 
   function floatTo16BitPCM(output, offset, input) {
@@ -400,7 +397,6 @@ export default function App() {
           return JSON.parse(jsonText);
         }
 
-        // حالت مرورگر عادی
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${targetApiKey}`;
 
         const response = await fetch(apiUrl, {
@@ -592,7 +588,7 @@ export default function App() {
               <ExternalLink className="w-3.5 h-3.5" />
             </a>
 
-            {/* ✅ دکمه رفرش داخلی */}
+            {}
             <button
               onClick={refreshApp}
               className="flex items-center gap-1.5 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-2 rounded-lg transition-all shrink-0"
@@ -991,7 +987,7 @@ export default function App() {
           </section>
         )}
 
-        {/* ✅ فوتر برندینگ شخصی */}
+        {}
         <footer className="pt-8 mt-4 border-t border-slate-800/80 flex flex-col sm:flex-row justify-center items-center gap-6 text-sm text-slate-400">
 
           <div className="flex items-center gap-2 text-xs text-slate-500">
