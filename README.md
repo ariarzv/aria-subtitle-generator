@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/ariar-avatar.png" width="140" alt="Aria icon" />
+  <img src="assets/aria-avatar.png" width="140" alt="Aria icon" />
 </p>
 
 # Aria 🎬
@@ -31,4 +31,6 @@ Aria is a desktop application that automatically generates high‑quality Persia
 ```bash
 npm install
 npm run dev
+```
+
 Built with ❤️ by Aria Rezvani
