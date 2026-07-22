@@ -1,11 +1,5 @@
 import React from 'react';
 
-/**
- * پرچم شیر و خورشید ایران با هاله طلایی درخشان
- * @param {number} size - سایز پرچم به پیکسل (پیش‌فرض ۶۴)
- * @param {boolean} glow - نمایش هاله طلایی (پیش‌فرض true)
- * @param {boolean} animated - انیمیشن پویا (پیش‌فرض true)
- */
 export default function IranFlag({ size = 64, glow = true, animated = true, className = '' }) {
   return (
     <div 
