@@ -1,4 +1,3 @@
-// electron/services/providers/GroqProvider.cjs
 const { net, session } = require('electron');
 
 class GroqProvider {
