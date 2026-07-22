@@ -34,7 +34,6 @@ const VPN_PRESETS = [
 ];
 
 export default function App() {
-  // ---------- تم ----------
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'dark');
   
   useEffect(() => {
@@ -42,7 +41,6 @@ export default function App() {
     document.body.className = `theme-${theme}`;
   }, [theme]);
 
-  // ---------- کلیدها ----------
   const [groqKeys, setGroqKeys] = useState(() => {
     try {
       const saved = localStorage.getItem('groq_keys');
@@ -68,20 +66,16 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('groq_keys', JSON.stringify(groqKeys));
     syncKeysToBackend();
-    // eslint-disable-next-line
   }, [groqKeys]);
 
   useEffect(() => {
     localStorage.setItem('gemini_keys', JSON.stringify(geminiKeys));
     syncKeysToBackend();
-    // eslint-disable-next-line
   }, [geminiKeys]);
 
-  // ---------- حالت خروجی ----------
   const [outputMode, setOutputMode] = useState(() => localStorage.getItem('output_mode') || OUTPUT_MODES.PERSIAN_ONLY);
   useEffect(() => { localStorage.setItem('output_mode', outputMode); }, [outputMode]);
 
-  // ---------- پروکسی ----------
   const [selectedVpn, setSelectedVpn] = useState(() => localStorage.getItem('selected_vpn') || 'v2rayng');
   const [proxyUrl, setProxyUrl] = useState(() => {
     const savedVpn = localStorage.getItem('selected_vpn') || 'v2rayng';
@@ -118,10 +112,8 @@ export default function App() {
     if (window.electronAPI?.setProxy && proxyUrl) {
       window.electronAPI.setProxy(proxyUrl);
     }
-    // eslint-disable-next-line
   }, []);
 
-  // ---------- ویدیو ----------
   const [videoFile, setVideoFile] = useState(null);
   const [videoUrl, setVideoUrl] = useState('');
   const [status, setStatus] = useState('idle');
@@ -138,7 +130,6 @@ export default function App() {
 
   const refreshApp = () => window.location.reload();
 
-  // ---------- Provider Stats ----------
   const [providerStats, setProviderStats] = useState(null);
 
   useEffect(() => {
@@ -153,7 +144,6 @@ export default function App() {
     return () => clearInterval(interval);
   }, []);
 
-  // ---------- Audio Utilities ----------
   function floatTo16BitPCM(output, offset, input) {
     for (let i = 0; i < input.length; i++, offset += 2) {
       let s = Math.max(-1, Math.min(1, input[i]));
@@ -217,7 +207,6 @@ export default function App() {
     return audioBufferToWav(renderedBuffer);
   }
 
-  // ---------- File Upload ----------
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -231,7 +220,6 @@ export default function App() {
     }
   };
 
-  // ---------- Main Processing ----------
   const processVideo = async () => {
     if (!videoFile) return;
     const validGroqKeys = groqKeys.filter(k => k && k.trim());
@@ -378,7 +366,6 @@ export default function App() {
     };
   };
 
-  // ---------- Subtitle Sync ----------
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -392,7 +379,6 @@ export default function App() {
     return () => video.removeEventListener('timeupdate', handleTimeUpdate);
   }, [subtitlesFa, subtitlesEn, outputMode]);
 
-  // ---------- Formatters ----------
   const formatSrtTime = (seconds) => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
