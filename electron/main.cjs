@@ -1,9 +1,10 @@
-const { app, BrowserWindow, ipcMain, shell, session, net } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, session } = require('electron');
 const path = require('path');
+const ProviderManager = require('./services/providers/ProviderManager.cjs');
 
 const isDev = !app.isPackaged;
-
 let currentProxy = '';
+const providerManager = new ProviderManager();
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -33,115 +34,80 @@ function createWindow() {
   }
 }
 
-// تنظیم پروکسی از داخل اپ
+// -------- Proxy Handler --------
 ipcMain.handle('proxy:set', async (event, proxyUrl) => {
   try {
     currentProxy = proxyUrl || '';
-
     if (!proxyUrl || proxyUrl.trim() === '') {
       await session.defaultSession.setProxy({ mode: 'direct' });
       return { ok: true, message: 'اتصال مستقیم فعال شد' };
     }
-
     await session.defaultSession.setProxy({
       proxyRules: proxyUrl.trim(),
       proxyBypassRules: '<local>'
     });
-
     return { ok: true, message: `پروکسی روی ${proxyUrl.trim()} تنظیم شد` };
   } catch (error) {
     return { ok: false, message: error.message };
   }
 });
 
-// ارتباط با Gemini API
-ipcMain.handle('gemini:generateContent', async (event, args) => {
+// -------- API Keys Handler --------
+ipcMain.handle('providers:setKeys', async (event, keys) => {
   try {
-    const { apiKey, payload, model } = args;
-
-    if (!apiKey || !apiKey.trim()) {
-      return {
-        ok: false,
-        status: 400,
-        errorMessage: 'کلید Gemini API وارد نشده است.'
-      };
-    }
-
-    const selectedModel = model || 'gemini-flash-latest';
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${selectedModel}:generateContent?key=${apiKey.trim()}`;
-
-    console.log('[Gemini] Sending request to:', selectedModel, '| Proxy:', currentProxy || 'direct');
-
-    const responseData = await new Promise((resolve, reject) => {
-      const request = net.request({
-        method: 'POST',
-        url: apiUrl,
-        session: session.defaultSession,
-        useSessionCookies: true
-      });
-
-      request.setHeader('Content-Type', 'application/json');
-
-      let chunks = [];
-      let statusCode = 0;
-
-      request.on('response', (response) => {
-        statusCode = response.statusCode;
-        response.on('data', (chunk) => chunks.push(chunk));
-        response.on('end', () => {
-          const body = Buffer.concat(chunks).toString('utf-8');
-          resolve({ statusCode, body });
-        });
-        response.on('error', (err) => reject(err));
-      });
-
-      request.on('error', (err) => reject(err));
-
-      request.write(JSON.stringify(payload));
-      request.end();
+    providerManager.setKeys(keys);
+    console.log('[main] Keys updated:', {
+      groq: keys.groqKeys?.length || 0,
+      gemini: keys.geminiKeys?.length || 0
     });
+    return { ok: true, stats: providerManager.getStats() };
+  } catch (error) {
+    return { ok: false, message: error.message };
+  }
+});
 
-    let data = null;
-    try {
-      data = JSON.parse(responseData.body);
-    } catch {
-      data = null;
-    }
+// -------- Stats Handler --------
+ipcMain.handle('providers:getStats', async () => {
+  return providerManager.getStats();
+});
 
-    console.log('[Gemini] Response status:', responseData.statusCode);
-
-    if (responseData.statusCode < 200 || responseData.statusCode >= 300) {
-      console.error('[Gemini] Error response:', responseData.body);
-      return {
-        ok: false,
-        status: responseData.statusCode,
-        data,
-        errorMessage:
-          data?.error?.message ||
-          responseData.body ||
-          `خطای Gemini API با کد ${responseData.statusCode}`
-      };
-    }
-
+// -------- Chunk Processing Handler --------
+ipcMain.handle('providers:processChunk', async (event, args) => {
+  try {
+    const { audioBase64, chunkStart, chunkEnd, outputMode } = args;
+    const wavBuffer = Buffer.from(audioBase64, 'base64');
+    
+    console.log(`[main] Processing chunk ${chunkStart}s-${chunkEnd}s | mode: ${outputMode}`);
+    
+    const result = await providerManager.processChunk(
+      wavBuffer,
+      chunkStart,
+      outputMode
+    );
+    
     return {
       ok: true,
-      status: responseData.statusCode,
-      data
+      englishSegments: result.englishSegments,
+      persianSegments: result.persianSegments
     };
-
   } catch (error) {
-    console.error('[Gemini] Fetch error:', error.message);
+    console.error('[main] processChunk error:', error);
     return {
       ok: false,
-      status: 500,
-      errorMessage: `خطای اتصال: ${error.message}. VPN را بررسی کنید یا آدرس پروکسی را در بالای اپ وارد کنید.`
+      errorMessage: error.message
     };
   }
 });
 
-app.whenReady().then(() => {
-  createWindow();
+// -------- Legacy Handler (سازگاری با کد قدیمی) --------
+ipcMain.handle('gemini:generateContent', async () => {
+  return {
+    ok: false,
+    errorMessage: 'این متد منقضی شده. لطفاً اپ را رفرش کنید.'
+  };
 });
+
+app.whenReady().then(createWindow);
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
