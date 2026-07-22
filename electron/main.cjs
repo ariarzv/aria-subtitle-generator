@@ -34,7 +34,6 @@ function createWindow() {
   }
 }
 
-// -------- Proxy Handler --------
 ipcMain.handle('proxy:set', async (event, proxyUrl) => {
   try {
     currentProxy = proxyUrl || '';
@@ -52,7 +51,6 @@ ipcMain.handle('proxy:set', async (event, proxyUrl) => {
   }
 });
 
-// -------- API Keys Handler --------
 ipcMain.handle('providers:setKeys', async (event, keys) => {
   try {
     providerManager.setKeys(keys);
@@ -66,12 +64,10 @@ ipcMain.handle('providers:setKeys', async (event, keys) => {
   }
 });
 
-// -------- Stats Handler --------
 ipcMain.handle('providers:getStats', async () => {
   return providerManager.getStats();
 });
 
-// -------- Chunk Processing Handler --------
 ipcMain.handle('providers:processChunk', async (event, args) => {
   try {
     const { audioBase64, chunkStart, chunkEnd, outputMode } = args;
@@ -99,7 +95,6 @@ ipcMain.handle('providers:processChunk', async (event, args) => {
   }
 });
 
-// -------- Legacy Handler (سازگاری با کد قدیمی) --------
 ipcMain.handle('gemini:generateContent', async () => {
   return {
     ok: false,
