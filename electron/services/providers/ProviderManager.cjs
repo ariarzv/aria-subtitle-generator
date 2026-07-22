@@ -1,4 +1,3 @@
-// electron/services/providers/ProviderManager.cjs
 const KeyRotator = require('../KeyRotator.cjs');
 const GroqProvider = require('./GroqProvider.cjs');
 const GeminiProvider = require('./GeminiProvider.cjs');
@@ -18,10 +17,9 @@ class ProviderManager {
     this.groq = new GroqProvider(this.groqRotator);
     this.gemini = new GeminiProvider(this.geminiRotator);
     
-    // ✅ صف مرکزی برای Gemini (در سطح Manager)
     this.geminiQueue = Promise.resolve();
     this.lastGeminiTime = 0;
-    this.minGeminiDelay = 1200; // ۱.۲ ثانیه بین درخواست‌ها
+    this.minGeminiDelay = 1200;
   }
 
   setKeys({ groqKeys = [], geminiKeys = [] }) {
@@ -33,9 +31,8 @@ class ProviderManager {
     let englishSegments = null;
     let persianSegments = [];
     let lastError = null;
-    const maxRetries = 5; // ✅ افزایش retry برای Groq
-
-    // ============ مرحله ۱: Groq ============
+    const maxRetries = 5;
+  
     for (let attempt = 0; attempt < maxRetries; attempt++) {
       try {
         englishSegments = await this.groq.transcribe(wavBuffer, chunkStart);
@@ -47,7 +44,7 @@ class ProviderManager {
         if (err.message === 'GROQ_RATE_LIMIT') {
           await this.sleep(3000 * (attempt + 1));
         } else if (err.message.includes('403') || err.message.includes('Access denied')) {
-          // ✅ 403 = VPN مشکل داره، صبر کن
+        
           await this.sleep(2000);
         } else if (attempt === maxRetries - 1) {
           throw new Error(`Groq failed: ${err.message}`);
@@ -67,7 +64,7 @@ class ProviderManager {
       return { englishSegments, persianSegments: [] };
     }
 
-    // ============ مرحله ۲: Gemini ============
+  
     persianSegments = await this.translateInBatches(englishSegments);
 
     console.log(`[ProviderManager] ✅ Final: ${persianSegments.length} Persian / ${englishSegments.length} English`);
@@ -101,9 +98,7 @@ class ProviderManager {
     return allTranslated.sort((a, b) => a.start - b.start);
   }
 
-  /**
-   * ✅ صف مرکزی: همه درخواست‌های Gemini از اینجا میگذرن، یکی یکی
-   */
+
   async queuedTranslate(batch, batchNum, totalBatches) {
     const previous = this.geminiQueue;
     let resolveCurrent;
@@ -112,7 +107,7 @@ class ProviderManager {
     try {
       await previous;
 
-      // حداقل delay بین درخواست‌ها
+     
       const now = Date.now();
       const elapsed = now - this.lastGeminiTime;
       if (elapsed < this.minGeminiDelay) {
