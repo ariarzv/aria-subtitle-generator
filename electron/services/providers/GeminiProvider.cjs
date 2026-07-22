@@ -1,22 +1,19 @@
-// electron/services/providers/GeminiProvider.cjs
 const { net, session } = require('electron');
 
 class GeminiProvider {
   constructor(keyRotator) {
     this.keyRotator = keyRotator;
     
-    // ✅ فقط مدل‌های تأیید شده و در دسترس
     this.models = [
       { name: 'gemini-2.0-flash', cooldownUntil: 0 },
       { name: 'gemini-2.0-flash-lite', cooldownUntil: 0 },
       { name: 'gemini-2.5-flash', cooldownUntil: 0 },
       { name: 'gemini-flash-latest', cooldownUntil: 0 },
     ];
-    
-    // ✅ صف مرکزی: همه درخواست‌ها یکی یکی
+
     this.queue = Promise.resolve();
     this.lastRequestTime = 0;
-    this.minDelayMs = 1500; // حداقل ۱.۵ ثانیه بین هر درخواست
+    this.minDelayMs = 1500;
   }
 
   getCurrentModel() {
@@ -29,7 +26,7 @@ class GeminiProvider {
     const available = this.models.filter(m => now >= m.cooldownUntil);
     
     if (available.length === 0) {
-      // همه cooldown دارن → صبر کن تا نزدیک‌ترین آزاد بشه
+      
       return null;
     }
     
@@ -44,20 +41,18 @@ class GeminiProvider {
     }
   }
 
-  /**
-   * ✅ ورودی همه درخواست‌ها از اینجاست — صف مرکزی
-   */
+
   async translate(segments) {
-    // اضافه کردن به صف
+   
     const previous = this.queue;
     let resolveCurrent;
     this.queue = new Promise(r => resolveCurrent = r);
 
     try {
-      // منتظر بمون تا نوبتت برسه
+     
       await previous;
 
-      // حداقل delay بین درخواست‌ها
+     
       const now = Date.now();
       const timeSinceLast = now - this.lastRequestTime;
       if (timeSinceLast < this.minDelayMs) {
@@ -80,11 +75,11 @@ class GeminiProvider {
       throw new Error('هیچ کلید Gemini API تنظیم نشده است.');
     }
 
-    // انتخاب مدل قابل استفاده
+
     let model = this.pickAvailableModel();
     
     if (!model) {
-      // همه cooldown دارن → صبر کن ۵ ثانیه و دوباره
+   
       console.log(`[Gemini] All models on cooldown, waiting 5s...`);
       await this.sleep(5000);
       model = this.pickAvailableModel() || this.models[0];
@@ -153,7 +148,7 @@ Output: JSON array with EXACTLY ${segments.length} translated items.`;
     }
 
     if (responseData.statusCode === 404) {
-      this.markCooldown(modelName, 999999); // دیگه هیچوقت استفاده نکن
+      this.markCooldown(modelName, 999999);
       throw new Error(`Model ${modelName} not available`);
     }
 
@@ -202,9 +197,6 @@ Output: JSON array with EXACTLY ${segments.length} translated items.`;
       }));
   }
 
-  /**
-   * ✅ HTTP request با timeout مناسب
-   */
   _httpRequest(url, payload) {
     return new Promise((resolve, reject) => {
       const request = net.request({
@@ -220,7 +212,6 @@ Output: JSON array with EXACTLY ${segments.length} translated items.`;
       let statusCode = 0;
       let done = false;
 
-      // ✅ Timeout بعد از ۴۵ ثانیه
       const timeout = setTimeout(() => {
         if (!done) {
           done = true;
