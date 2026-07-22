@@ -1,4 +1,3 @@
-// electron/services/KeyRotator.cjs
 class KeyRotator {
   constructor(keys = []) {
     this.keys = keys.filter(k => k && k.trim());
