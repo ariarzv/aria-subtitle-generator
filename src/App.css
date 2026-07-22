@@ -1,12 +1,11 @@
-/* ==================== FONTS ==================== */
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&family=Cinzel:wght@400..900&display=swap');
 
-/* ==================== ROOT VARIABLES ==================== */
+
 :root {
   --font-fa: 'Vazirmatn', sans-serif;
   --font-luxury: 'Cinzel', serif;
   
-  /* Gold Palette */
+
   --gold-bright: #FFD700;
   --gold-warm: #FFC107;
   --gold-deep: #DAA520;
@@ -15,7 +14,7 @@
   --amber: #FF8C00;
 }
 
-/* ==================== GLOBAL ==================== */
+
 * {
   box-sizing: border-box;
 }
@@ -27,7 +26,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ==================== THEME: ROYAL DARK (Default) ==================== */
+
 .theme-dark {
   --bg-primary: #0a0a0a;
   --bg-secondary: #171717;
@@ -43,7 +42,6 @@ body {
   --accent-glow: rgba(255, 215, 0, 0.3);
 }
 
-/* ==================== THEME: ROYAL CHARCOAL ==================== */
 .theme-charcoal {
   --bg-primary: #1c1917;
   --bg-secondary: #292524;
@@ -59,7 +57,7 @@ body {
   --accent-glow: rgba(255, 193, 7, 0.3);
 }
 
-/* ==================== THEME: ROYAL LIGHT ==================== */
+
 .theme-light {
   --bg-primary: #FAF7F2;
   --bg-secondary: #F5EFE6;
@@ -75,7 +73,7 @@ body {
   --accent-glow: rgba(184, 134, 11, 0.2);
 }
 
-/* ==================== BASE STYLES ==================== */
+
 .app-container {
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -84,7 +82,7 @@ body {
   transition: background 0.5s ease, color 0.3s ease;
 }
 
-/* ==================== ANIMATED GOLD PARTICLES BACKGROUND ==================== */
+
 .gold-particles {
   position: fixed;
   top: 0;
@@ -126,7 +124,7 @@ body {
   }
 }
 
-/* ==================== HERO GLOW ==================== */
+
 .hero-glow {
   position: relative;
 }
@@ -151,7 +149,7 @@ body {
   50% { opacity: 0.8; transform: translateX(-50%) scale(1.1); }
 }
 
-/* ==================== CARDS ==================== */
+
 .royal-card {
   background: var(--bg-card);
   backdrop-filter: blur(20px);
@@ -179,7 +177,7 @@ body {
   box-shadow: 0 0 30px var(--accent-glow);
 }
 
-/* ==================== INPUTS ==================== */
+
 .royal-input {
   background: var(--bg-input);
   border: 1px solid var(--border-color);
@@ -200,7 +198,6 @@ body {
   color: var(--text-muted);
 }
 
-/* ==================== BUTTONS ==================== */
 .royal-btn-primary {
   background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold-deep) 50%, var(--bronze) 100%);
   color: #0a0a0a;
@@ -264,7 +261,6 @@ body {
   box-shadow: 0 0 15px var(--accent-glow);
 }
 
-/* ==================== GOLD TEXT ==================== */
 .gold-text {
   background: linear-gradient(135deg, var(--gold-bright), var(--gold-deep), var(--bronze));
   -webkit-background-clip: text;
@@ -279,7 +275,6 @@ body {
   50% { background-position: 100% center; }
 }
 
-/* ==================== GOLD BORDER ANIMATION ==================== */
 .gold-border-animated {
   position: relative;
   border-radius: 16px;
@@ -300,7 +295,6 @@ body {
   50% { background-position: 100% 50%; }
 }
 
-/* ==================== PROGRESS BAR ==================== */
 .royal-progress {
   background: var(--bg-secondary);
   border-radius: 999px;
@@ -323,7 +317,7 @@ body {
   100% { background-position: 200% center; }
 }
 
-/* ==================== BADGES ==================== */
+
 .royal-badge {
   display: inline-flex;
   align-items: center;
@@ -355,7 +349,6 @@ body {
   color: #EF4444;
 }
 
-/* ==================== SCROLLBAR ==================== */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -376,13 +369,13 @@ body {
   background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
 }
 
-/* Firefox */
+
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: var(--gold-deep) var(--bg-secondary);
 }
 
-/* ==================== ANIMATIONS ==================== */
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
@@ -401,7 +394,7 @@ body {
   animation: shimmerBadge 2s ease-in-out infinite;
 }
 
-/* ==================== RANGE SLIDER ==================== */
+
 input[type="range"].royal-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -430,7 +423,7 @@ input[type="range"].royal-slider::-webkit-slider-thumb:hover {
   box-shadow: 0 0 20px var(--accent-primary);
 }
 
-/* ==================== HEADER TITLE ==================== */
+
 .royal-title {
   font-family: var(--font-luxury);
   font-weight: 900;
@@ -448,7 +441,7 @@ input[type="range"].royal-slider::-webkit-slider-thumb:hover {
   100% { background-position: 200% center; }
 }
 
-/* ==================== DIVIDER ==================== */
+
 .royal-divider {
   height: 1px;
   background: linear-gradient(90deg, 
@@ -461,7 +454,7 @@ input[type="range"].royal-slider::-webkit-slider-thumb:hover {
   opacity: 0.4;
 }
 
-/* ==================== VIDEO PLAYER SUBTITLE OVERLAY ==================== */
+
 .subtitle-overlay {
   background: rgba(10, 10, 10, 0.85);
   backdrop-filter: blur(10px);
@@ -476,18 +469,17 @@ input[type="range"].royal-slider::-webkit-slider-thumb:hover {
     0 0 20px var(--accent-glow);
 }
 
-/* ==================== SELECTION ==================== */
+
 ::selection {
   background: var(--accent-primary);
   color: var(--bg-primary);
 }
 
-/* ==================== VIDEO CONTROLS FIX ==================== */
+
 video::-webkit-media-controls-panel {
   background-color: rgba(10, 10, 10, 0.6);
 }
 
-/* ==================== ICON GLOW ==================== */
 .icon-glow {
   filter: drop-shadow(0 0 4px var(--accent-glow));
 }
