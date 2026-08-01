@@ -325,6 +325,6 @@ Unauthorized copying, modification, distribution, or reverse engineering of this
 
 **ساخته شده با ♥ در ایران**
 
-**© 2025 AriaCraft. All rights reserved.**
+**© 2026 AriaCraft. All rights reserved.**
 
 </div>
